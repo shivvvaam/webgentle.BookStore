@@ -1,37 +1,79 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webgentle.BookStore.Data;
 using Webgentle.BookStore.Models;
 
 namespace Webgentle.BookStore.Repository
 {
     public class BookRepository
     {
-        public List<BookModel> GetAllBooks()
+        private readonly BookStoreContext _context = null;
+
+        
+
+        public BookRepository(BookStoreContext context)
         {
-            return DataSource();
+            _context = context;
         }
-        public BookModel GetBookById(int id)
+        public async Task<int> AddNewBook(BookModel model)
         {
-            return DataSource().Where(x => x.Id == id).FirstOrDefault();
+            var newBook = new Books()
+            {
+                Author = model.Author,
+                CreatedOn= DateTime.UtcNow,
+                Description=model.Description,
+                Title=model.Title,
+                LanguageId=model.LanguageId,
+                TotalPages=model.TotalPages.HasValue ? model.TotalPages.Value:0,
+                UpdatedOn=DateTime.UtcNow
+            };
+            await _context.Books.AddAsync(newBook);
+            await _context.SaveChangesAsync();
+
+            return newBook.Id;
+
+        }
+
+        public async Task<List<BookModel>> GetAllBooks()
+        {
+            return await _context.Books
+                  .Select(book => new BookModel()
+                  {
+                      Author = book.Author,
+                      Category = book.Category,
+                      Description = book.Description,
+                      Id = book.Id,
+                      LanguageId = book.LanguageId,
+                      Language = book.Language.Name,
+                      Title = book.Title,
+                      TotalPages = book.TotalPages
+                  }).ToListAsync();
+        }
+
+        public async Task<BookModel> GetBookById(int id)
+        {
+            return await _context.Books.Where(x => x.Id == id)
+                .Select(book => new BookModel()
+                {
+                    Author = book.Author,
+                    Category = book.Category,
+                    Description = book.Description,
+                    Id = book.Id,
+                    LanguageId = book.LanguageId,
+                    Language = book.Language.Name,
+                    Title = book.Title,
+                    TotalPages = book.TotalPages
+                }).FirstOrDefaultAsync();
+           
         }
         public List<BookModel> SearchBook(string title , string authorName)
         {
-            return DataSource().Where(x => x.Title.Contains(title)  && x.Author.Contains(authorName)).ToList();
+            return null;
         }
 
-        private List<BookModel> DataSource()
-        {
-            return new List<BookModel>()
-            {
-            new BookModel() { Id=1 ,  Title="MVC" ,  Author="Shivam", Description="This is for desciption of MVC book",Category="Programming" ,Language="English", TotalPages=134 },
-            new BookModel() { Id = 2, Title = "Dot Net Core", Author = "morphy" ,Description="This is for desciption of Dot Net Core book",Category="Framwork" ,Language="Chinese", TotalPages=567 },
-            new BookModel() { Id = 3, Title = "JAVA", Author = "richards",Description="This is for desciption of JAVA book",Category="Developer" ,Language="English", TotalPages=97 },
-            new BookModel() { Id = 4, Title = "PHP", Author = "shawn ",Description="This is for desciption of PHP book",Category="Concept" ,Language="English", TotalPages=564 },
-            new BookModel() { Id = 5, Title = "C#", Author = "laura ",Description="This is for desciption of C# book" ,Category="Programming" ,Language="English", TotalPages=100},
-            new BookModel() { Id = 6, Title = "Azure Devops", Author = "Miranda ",Description="This is for desciption of Azure Devops book",Category="DevOps" ,Language="English", TotalPages=800 },
-            };
-        }
+        
     }
 }
