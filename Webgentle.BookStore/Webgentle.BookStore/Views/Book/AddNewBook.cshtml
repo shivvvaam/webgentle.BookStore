@@ -15,7 +15,7 @@
         </div>
     }
 
-<form method="post" asp-action="AddNewBook" asp-controller="Book">
+<form method="post"   asp-action="AddNewBook" asp-controller="Book">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="LanguageId" class="form-label"></label>
@@ -62,3 +62,21 @@
     </div>
 </form>
 </div>
+
+@*@section scripts { 
+<script>
+    function myComplete(data) {
+        alert("I'm from complete");
+        console.log(data);
+    }
+    function mySuccess() {
+        alert("I'm from success");
+        console.log(data);
+
+    }
+    function myFailure() {
+        alert("I'm from Failure");
+        console.log(data);
+    }
+</script>*@
+}
