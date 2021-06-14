@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Webgentle.BookStore.Models;
@@ -13,10 +15,14 @@ namespace Webgentle.BookStore.Controllers
     {
         private readonly BookRepository _bookRepository = null;
         private readonly LanguageRepository _languageRepository = null;
-        public BookController(BookRepository bookRepository, LanguageRepository languageRepository) 
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookController(BookRepository bookRepository,
+            LanguageRepository languageRepository,
+            IWebHostEnvironment webHostEnvironment) 
         {
             _bookRepository = bookRepository;
             _languageRepository = languageRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<ViewResult> Getallbooks()
@@ -45,24 +51,6 @@ namespace Webgentle.BookStore.Controllers
 
             ViewBag.Language =new SelectList( await _languageRepository.GetLanguages(),"Id","Name");
 
-            //ViewBag.Language = new SelectList(GetLanguage(),"Id","Text");
-
-            //ViewBag.Language = GetLanguage().Select(x => new SelectListItem() 
-            //{
-            //    Text=x.Text,
-            //    Value=x.Id.ToString()
-
-            //}).ToList();
-
-            //ViewBag.Language = new List<SelectListItem>()
-            //{
-            //    new SelectListItem(){Text="Hindi", Value="1" },
-            //    new SelectListItem(){Text="English", Value="2" },
-            //    new SelectListItem(){Text="Dutch", Value="3"},
-            //    new SelectListItem(){Text="Tamil", Value="4"},
-            //    new SelectListItem(){Text="Urdu", Value="5"},
-            //    new SelectListItem(){Text="Frenach", Value="6"},
-            //};
 
 
             ViewBag.IsSuccess = isSuccess;
@@ -76,6 +64,17 @@ namespace Webgentle.BookStore.Controllers
         {
             if(ModelState.IsValid)
             {
+                if (bookModel.CoverPhoto!= null)
+                {
+                    string folder = "books/cover/";
+                    folder += Guid.NewGuid().ToString() +"_"+ bookModel.CoverPhoto.FileName;
+
+                    bookModel.CoverImageUrl = "/"+folder;
+
+                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+
+                    await bookModel.CoverPhoto.CopyToAsync(new FileStream(serverFolder, FileMode.Create)); ;
+                }
                 int id = await _bookRepository.AddNewBook(bookModel);
                 if (id > 0)
                 {
@@ -85,26 +84,8 @@ namespace Webgentle.BookStore.Controllers
 
             ViewBag.Language = new SelectList(await _languageRepository.GetLanguages(), "Id", "Name");
 
-
-            //ViewBag.Language = new List<SelectListItem>()
-            //{
-            //    new SelectListItem(){Text="Hindi", Value="1" },
-            //    new SelectListItem(){Text="English", Value="2" },
-            //    new SelectListItem(){Text="Dutch", Value="3"},
-            //    new SelectListItem(){Text="Tamil", Value="4"},
-            //    new SelectListItem(){Text="Urdu", Value="5"},
-            //    new SelectListItem(){Text="Frenach", Value="6"},
-            //};
             return View();
         }
-        //private List<LanguageModel> GetLanguage()
-        //{
-        //    return new List<LanguageModel>()
-        //    {
-        //        new LanguageModel(){Id=1 , Text= "Hindi"},
-        //        new LanguageModel(){Id=2 , Text= "English"},
-        //        new LanguageModel(){Id=3 , Text= "French"},
-        //    };
-        //}
+        
     }
 }
