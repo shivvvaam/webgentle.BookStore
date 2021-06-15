@@ -30,7 +30,7 @@
                     }
 
 
-                    
+
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -67,9 +67,13 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <button class="btn btn-outline-primary">
+
+                    @*<button class="btn btn-outline-primary">*@
+                    <a class="btn btn-outline-primary" href="@Model.BookPdfUrl" target="_blank">
                         Read now
-                    </button>
+                    </a>
+                    @*</button>*@
+
                 </div>
             </div>
 
@@ -85,6 +89,7 @@
 
 
     </div>
+
 
     <div class="py-5 bg-light">
         <h3 class="h3">Similar books</h3>

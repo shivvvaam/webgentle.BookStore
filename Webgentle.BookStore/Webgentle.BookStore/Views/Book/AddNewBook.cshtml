@@ -75,6 +75,16 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="BookPdf" class="form-label"></label>
+        <div class="mb-3">
+            @*<label for="formFileSm" class="form-label">Choose File</label>*@
+            <input class="form-control form-control-sm" id="formFileSm" asp-for="BookPdf">
+        </div>
+        <span asp-validation-for="BookPdf" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
         <input type="submit" value="Add book" class="btn btn-primary" />
 
     </div>
