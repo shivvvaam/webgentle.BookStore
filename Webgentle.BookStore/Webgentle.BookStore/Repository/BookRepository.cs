@@ -8,11 +8,11 @@ using Webgentle.BookStore.Models;
 
 namespace Webgentle.BookStore.Repository
 {
-    public class BookRepository
+    public class BookRepository : IBookRepository
     {
         private readonly BookStoreContext _context = null;
 
-        
+
 
         public BookRepository(BookStoreContext context)
         {
@@ -23,22 +23,22 @@ namespace Webgentle.BookStore.Repository
             var newBook = new Books()
             {
                 Author = model.Author,
-                CreatedOn= DateTime.UtcNow,
-                Description=model.Description,
-                Title=model.Title,
-                LanguageId=model.LanguageId,
-                TotalPages=model.TotalPages.HasValue ? model.TotalPages.Value:0,
-                UpdatedOn=DateTime.UtcNow,
-                CoverImageUrl=model.CoverImageUrl,
-                BookPdfUrl=model.BookPdfUrl
+                CreatedOn = DateTime.UtcNow,
+                Description = model.Description,
+                Title = model.Title,
+                LanguageId = model.LanguageId,
+                TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value : 0,
+                UpdatedOn = DateTime.UtcNow,
+                CoverImageUrl = model.CoverImageUrl,
+                BookPdfUrl = model.BookPdfUrl
             };
             newBook.bookGallery = new List<BookGallery>();
-            foreach(var file in model.Gallery)
+            foreach (var file in model.Gallery)
             {
                 newBook.bookGallery.Add(new BookGallery()
                 {
-                    Name=file.Name,
-                    URL=file.URL
+                    Name = file.Name,
+                    URL = file.URL
                 });
             }
 
@@ -62,7 +62,7 @@ namespace Webgentle.BookStore.Repository
                       Language = book.Language.Name,
                       Title = book.Title,
                       TotalPages = book.TotalPages,
-                      CoverImageUrl=book.CoverImageUrl
+                      CoverImageUrl = book.CoverImageUrl
                   }).ToListAsync();
         }
 
@@ -98,22 +98,22 @@ namespace Webgentle.BookStore.Repository
                     Language = book.Language.Name,
                     Title = book.Title,
                     TotalPages = book.TotalPages,
-                    CoverImageUrl=book.CoverImageUrl,
-                    Gallery=book.bookGallery.Select(g => new GalleryModel()
-                    { 
-                        Id=g.Id,
-                        Name=g.Name,
-                        URL=g.URL
+                    CoverImageUrl = book.CoverImageUrl,
+                    Gallery = book.bookGallery.Select(g => new GalleryModel()
+                    {
+                        Id = g.Id,
+                        Name = g.Name,
+                        URL = g.URL
                     }).ToList(),
-                    BookPdfUrl=book.BookPdfUrl
+                    BookPdfUrl = book.BookPdfUrl
                 }).FirstOrDefaultAsync();
-           
+
         }
-        public List<BookModel> SearchBook(string title , string authorName)
+        public List<BookModel> SearchBook(string title, string authorName)
         {
             return null;
         }
 
-        
+
     }
 }

@@ -8,7 +8,7 @@ using Webgentle.BookStore.Models;
 
 namespace Webgentle.BookStore.Repository
 {
-    public class LanguageRepository
+    public class LanguageRepository : ILanguageRepository
     {
         private readonly BookStoreContext _context = null;
 
@@ -21,9 +21,9 @@ namespace Webgentle.BookStore.Repository
         {
             return await _context.Language.Select(x => new LanguageModel()
             {
-                Id=x.Id,
-                Description=x.Description,
-                Name=x.Name
+                Id = x.Id,
+                Description = x.Description,
+                Name = x.Name
             }).ToListAsync();
         }
 
