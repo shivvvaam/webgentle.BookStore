@@ -2,6 +2,7 @@
 @{ 
     ViewData["Title"] = "Add new book";
 }
+@inject Webgentle.BookStore.Repository.ILanguageRepository _languageRepo
 
 <div class="container">
     <h3 class="display-4">Add new book</h3>
@@ -19,7 +20,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="LanguageId" class="form-label"></label>
-        <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.Language">
+        <select asp-for="LanguageId" class="form-control" asp-items="(await _languageRepo.GetLanguages()).Select(x=>new SelectListItem() { Text=x.Name,Value=x.Id.ToString()})">
             <option value="">Please choose book language</option>
             @*<option value="Hindi">Hindi (One of the best language)</option>
                 <option value="English">English (Global Language)</option>
