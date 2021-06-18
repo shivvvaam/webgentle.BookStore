@@ -19,7 +19,7 @@ namespace Webgentle.BookStore
     public class Startup
     {
         //private readonly Iconfiguration _configuration;
-        //public Startup(Iconfiguration configuration) 
+        //public Startup(Iconfiguration configuration)
         //{
         //    _configuration = configuration;
         //}
@@ -33,9 +33,17 @@ namespace Webgentle.BookStore
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreContext>();
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 5;
+            });
+
+            services.ConfigureApplicationCookie(config => 
+            {
+                config.LoginPath = "/login";
+            
+
             });
 
             services.AddControllersWithViews();
@@ -66,6 +74,7 @@ namespace Webgentle.BookStore
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
