@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webgentle.BookStore.Data;
+using Webgentle.BookStore.Models;
 using Webgentle.BookStore.Repository;
 
 namespace Webgentle.BookStore
@@ -30,7 +31,7 @@ namespace Webgentle.BookStore
                 options => options.UseSqlServer("Server=LAPTOP-IVRQLME3\\SQLEXPRESS;Database=BookStore;Integrated Security=True;"));
             //options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreContext>();
 
             services.AddControllersWithViews();
