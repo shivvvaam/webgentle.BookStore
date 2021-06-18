@@ -33,6 +33,10 @@ namespace Webgentle.BookStore
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 5;
+            });
 
             services.AddControllersWithViews();
 #if DEBUG
