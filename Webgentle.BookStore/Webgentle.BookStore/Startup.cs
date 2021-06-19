@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webgentle.BookStore.Data;
+using Webgentle.BookStore.Helpers;
 using Webgentle.BookStore.Models;
 using Webgentle.BookStore.Repository;
+using Webgentle.BookStore.Service;
 
 namespace Webgentle.BookStore
 
@@ -37,6 +39,11 @@ namespace Webgentle.BookStore
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+               
             });
 
             services.ConfigureApplicationCookie(config => 
@@ -58,6 +65,9 @@ namespace Webgentle.BookStore
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
