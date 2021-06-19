@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace Webgentle.BookStore.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Admin")]
         public ViewResult ContactUs()
         {
             return View();

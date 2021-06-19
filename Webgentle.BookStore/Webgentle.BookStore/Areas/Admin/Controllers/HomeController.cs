@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 namespace Webgentle.BookStore.Areas.Admin.Controllers
 {
     [Area("admin")]
+    [Route("admin/[controller]/[action]")]
     public class HomeController : Controller
     {
         // GET: HomeController
+        [Route("")]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: HomeController/Details/5
+        [Route("details/{id?}")]
         public ActionResult Details(int id)
         {
             return View();
